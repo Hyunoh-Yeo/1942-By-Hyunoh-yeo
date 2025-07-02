@@ -1,5 +1,7 @@
 import pygame
+import random
 from Player import *
+from Enemy import *
 
 #Initializing pygame
 pygame.init()
@@ -21,6 +23,13 @@ playerX = 608
 playerY = 650
 
 player = Player(playerImg, playerX, playerY)
+
+#Enemy
+enemyImg = "1942-By-Hyunoh-Yeo\Image\Su-34.png"
+enemyX = random.randint(0, 1216)
+enemyY = 0
+
+enemy = Enemy(enemyImg, enemyX, enemyY)
 
 def displayPlayer(temp):
     screen.blit(temp.image, (temp.x, temp.y))
@@ -53,9 +62,20 @@ while running:
             player.x_change = 0
             player.y_change = 0
 
+    enemy.y_change = 0.1
+    enemy.x_change = random.uniform(-0.1, 0.1)
+
+
+
     #move player
     player.move()
+    enemy.move()
     displayPlayer(player)
+
+    if not enemy.destroyed and not enemy.attacked:
+        displayPlayer(enemy)
+    else:
+        enemy = Enemy(enemyImg, random.randint(0, 1216), enemyY)
 
     pygame.display.update()
 
