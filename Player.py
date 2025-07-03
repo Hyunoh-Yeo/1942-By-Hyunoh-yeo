@@ -25,3 +25,6 @@ class Player:
         elif self.y >= 656:
             self.y = 656
 
+    def display(self, screen):
+        screen.blit(self.image, (self.x, self.y))
+
