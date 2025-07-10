@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 from Player import *
 from Enemy import *
 from Bullet import *
@@ -33,6 +34,14 @@ enemy = Enemy(enemyImg)
 bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
 bullet = Bullet(bulletImg, 0, 800)
 bullets = []
+
+def isCollision(enemy, bullet):
+    distance = math.sqrt(math.pow((enemy.x + 32) - bullet.x, 2) + math.pow(enemy.y - bullet.y, 2))
+
+    if distance < 27:
+        return True
+    else:
+        return False
 
 #Game Loop
 running = True
@@ -84,19 +93,24 @@ while running:
     enemy.move()
     player.display(screen)
 
+    #move each bullet from bullets list
+    for thisbullet in bullets:
+        if thisbullet.y < 0:
+            bullets.remove(thisbullet)
+        else:
+            thisbullet.fire(screen, thisbullet.x, thisbullet.y)
+            thisbullet.y -= thisbullet.y_change
+
+        if isCollision(enemy, thisbullet):
+            enemy.destroyed = True
+
+            bullets.remove(thisbullet)
+
     #move enemy
     if not enemy.destroyed and not enemy.attacked:
         enemy.display(screen)
     else:
         enemy = Enemy(enemyImg)
-
-    #move each bullet from bullets list
-    for thisbullet in bullets:
-        if thisbullet.y < 0:
-            bullets.remove(thisbullet)
-        if thisbullet.bullet_state is "fire":
-            thisbullet.fire(screen, thisbullet.x, thisbullet.y)
-            thisbullet.y -= thisbullet.y_change
 
     pygame.display.update()
 

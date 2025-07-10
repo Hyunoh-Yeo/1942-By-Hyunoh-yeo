@@ -8,11 +8,7 @@ class Bullet:
         self.y = y
         self.y_change = 1
 
-        self.bullet_state = "ready"
-
     def fire(self, screen, x, y):
-        self.bullet_state = "fire"
-
         self.x = x
         self.y = y
 
