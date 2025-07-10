@@ -64,7 +64,7 @@ while running:
 
             #Space Pressed
             if event.key == pygame.K_SPACE:
-                bullet.fire(screen, player.x, player.y)
+                bullet.fire(screen, player.x + 24, player.y)
         
         #Key Up
         if event.type == pygame.KEYUP:
@@ -86,6 +86,9 @@ while running:
         enemy = Enemy(enemyImg)
 
     #move bullet
+    if bullet.y < 0:
+        bullet.y = player.y
+        bullet.bullet_state = "ready"
     if bullet.bullet_state is "fire":
         bullet.fire(screen, bullet.x, bullet.y)
         bullet.y -= bullet.y_change
