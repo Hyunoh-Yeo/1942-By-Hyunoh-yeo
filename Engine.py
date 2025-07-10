@@ -90,11 +90,10 @@ while running:
     else:
         enemy = Enemy(enemyImg)
 
-    #move bullet
+    #move each bullet from bullets list
     for thisbullet in bullets:
         if thisbullet.y < 0:
-            thisbullet.y = player.y
-            thisbullet.bullet_state = "ready"
+            bullets.remove(thisbullet)
         if thisbullet.bullet_state is "fire":
             thisbullet.fire(screen, thisbullet.x, thisbullet.y)
             thisbullet.y -= thisbullet.y_change
