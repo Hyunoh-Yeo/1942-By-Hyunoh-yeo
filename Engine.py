@@ -35,8 +35,19 @@ bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
 bullet = Bullet(bulletImg, 0, 800)
 bullets = []
 
+#Score
+score_val = 0
+font = pygame.font.Font("freesansbold.ttf", 32)
+
+textX = 10
+textY = 10
+
+def show_score(x, y):
+    score = font.render("Score : " + str(score_val), True, (255, 255, 255))
+    screen.blit(score, (x, y))
+
 def isCollision(enemy, bullet):
-    distance = math.sqrt(math.pow((enemy.x + 32) - bullet.x, 2) + math.pow(enemy.y - bullet.y, 2))
+    distance = math.sqrt(math.pow((enemy.x + 24) - bullet.x, 2) + math.pow(enemy.y - bullet.y, 2))
 
     if distance < 27:
         return True
@@ -104,6 +115,8 @@ while running:
         if isCollision(enemy, thisbullet):
             enemy.destroyed = True
 
+            score_val += 1
+
             bullets.remove(thisbullet)
 
     #move enemy
@@ -111,6 +124,8 @@ while running:
         enemy.display(screen)
     else:
         enemy = Enemy(enemyImg)
+
+    show_score(textX, textY)
 
     pygame.display.update()
 
