@@ -16,7 +16,6 @@ class Enemy:
         self.x_change = 0.5
         """
 
-
     def move(self):
         if not self.destroyed:
             """
