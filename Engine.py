@@ -9,6 +9,7 @@ from Button import *
 from pygame import mixer
 
 os.chdir("1942-By-Hyunoh-yeo")
+print(os.getcwd())
 
 #Initializing pygame
 pygame.init()
@@ -17,11 +18,11 @@ pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 
 #Background
-background = pygame.image.load("Image\Backgrounds.png")
+background = pygame.image.load("Image/Backgrounds.png")
 
 #Start & Exir Button
-startImg = pygame.image.load("Image\Start.png").convert_alpha()
-exitImg = pygame.image.load("Image\Exit.png").convert_alpha()
+startImg = pygame.image.load("Image/Start.png").convert_alpha()
+exitImg = pygame.image.load("Image/Exit.png").convert_alpha()
 start_button = Button(400, 150, startImg, 0.5)
 exit_button = Button(500, 400, exitImg, 0.3)
 
@@ -30,19 +31,19 @@ title = "1942 by Hyunoh Yeo"
 pygame.display.set_caption(title)
 
 #Icon
-icon = pygame.image.load("Image\Icon.png")
+icon = pygame.image.load("Image/Icon.png")
 pygame.display.set_icon(icon)
 
 #Player
-playerImg = "Image\Player.png"
+playerImg = "Image/Player.png"
 player = Player(playerImg)
 
 #Enemy
-enemyImg = "Image\Enemy.png"
+enemyImg = "Image/Enemy.png"
 enemy = Enemy(enemyImg)
 
 #Bullet
-bulletImg = "Image\Bullet.png"
+bulletImg = "Image/Bullet.png"
 bullet = Bullet(bulletImg, 0, 800)
 bullets = []
 
@@ -53,12 +54,12 @@ textX = 10
 textY = 10
 
 #Background Music
-mixer.music.load("Sounds\Battlefield 1942 theme.wav")
+mixer.music.load("Sounds/Battlefield 1942 theme.wav")
 mixer.music.play(-1)
 
 #Sounds
-bullet_sound = mixer.Sound("Sounds\Gun Sound.wav")
-collision_sound = mixer.Sound("Sounds\explosion.wav")
+bullet_sound = mixer.Sound("Sounds/Gun Sound.wav")
+collision_sound = mixer.Sound("Sounds/explosion.wav")
 
 #Shows score
 def show_score(x, y):
@@ -134,7 +135,7 @@ while running:
 
                 #Space Pressed
                 if event.key == pygame.K_SPACE:
-                    bulletImg = "Image\Bullet.png"
+                    bulletImg = "Image/Bullet.png"
                     bullets.append(Bullet(bulletImg, 0, 800))
 
                     bullets[-1].fire(screen, player.x + 24, player.y)
