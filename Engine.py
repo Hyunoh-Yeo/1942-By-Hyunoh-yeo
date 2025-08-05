@@ -15,10 +15,16 @@ print(os.getcwd())
 pygame.init()
 
 #Screen
-screen = pygame.display.set_mode((1280, 720))
+screen_width = 1280
+screen_height = 720
+screen = pygame.display.set_mode((screen_width, screen_height))
 
 #Background
-background = pygame.image.load("Image/Backgrounds.png")
+background = pygame.image.load("Image/Backgrounds.png").convert()
+background_height = background.get_height()
+
+tiles = math.ceil(screen_height / background_height) + 1
+scroll = 0
 
 #Start & Exir Button
 startImg = pygame.image.load("Image/Start.png").convert_alpha()
@@ -112,7 +118,12 @@ while running:
         screen.fill((80, 80, 250))
 
         #Background
-        screen.blit(background, (0, 0))
+        for i in range(tiles):
+            screen.blit(background, (0, -((i * background_height)) + scroll))
+
+        scroll += 0.3
+        if scroll > background_height - 100:
+            scroll = 0
 
         for event in pygame.event.get():
 
