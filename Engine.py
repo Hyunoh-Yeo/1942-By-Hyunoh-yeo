@@ -9,7 +9,6 @@ from Button import *
 from pygame import mixer
 
 os.chdir("1942-By-Hyunoh-yeo")
-print(os.getcwd())
 
 #Initializing pygame
 pygame.init()
@@ -27,6 +26,9 @@ tiles = math.ceil(screen_height / background_height) + 1
 scroll = 0
 d_scroll = 0.2
 
+#Load Background Music
+mixer.music.load("Sounds/Battlefield 1942 theme.wav")
+
 #Start & Exir Button
 startImg = pygame.image.load("Image/Start.png").convert_alpha()
 exitImg = pygame.image.load("Image/Exit.png").convert_alpha()
@@ -41,33 +43,7 @@ pygame.display.set_caption(title)
 icon = pygame.image.load("Image/Icon.png")
 pygame.display.set_icon(icon)
 
-#Player
-playerImg = "Image/Player.png"
-player = Player(playerImg)
-
-#Enemy
-enemyImg = "Image/Enemy.png"
-enemies = []
-enemy_n = 3
-for _ in range(enemy_n):
-    enemies.append(Enemy(enemyImg))
-
-#Bullet
-bulletImg = "Image/Bullet.png"
-bullet = Bullet(bulletImg, 0, 800)
-bullets = []
-
-#Score
-score_val = 0
-font = pygame.font.Font("freesansbold.ttf", 32)
-textX = 10
-textY = 10
-
-#Background Music
-mixer.music.load("Sounds/Battlefield 1942 theme.wav")
-mixer.music.play(-1)
-
-#Sounds
+#Sound Effects
 bullet_sound = mixer.Sound("Sounds/Gun Sound.wav")
 collision_sound = mixer.Sound("Sounds/explosion.wav")
 
@@ -119,6 +95,31 @@ while running:
             pygame.display.update()
 
     elif ingame:
+        #Player
+        playerImg = "Image/Player.png"
+        player = Player(playerImg)
+
+        #Enemy
+        enemyImg = "Image/Enemy.png"
+        enemies = []
+        enemy_n = 3
+        for _ in range(enemy_n):
+            enemies.append(Enemy(enemyImg))
+
+        #Bullet
+        bulletImg = "Image/Bullet.png"
+        bullet = Bullet(bulletImg, 0, 800)
+        bullets = []
+
+        #Score
+        score_val = 0
+        font = pygame.font.Font("freesansbold.ttf", 32)
+        textX = 10
+        textY = 10
+
+        #Play Background Music
+        mixer.music.play(-1)
+
         while ingame:
             #RGB Screen
             screen.fill((80, 80, 250))
