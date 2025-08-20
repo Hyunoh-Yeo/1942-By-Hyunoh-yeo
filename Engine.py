@@ -120,6 +120,7 @@ while running:
         #Play Background Music
         mixer.music.play(-1)
 
+        play_time = 0
         while ingame:
             #RGB Screen
             screen.fill((80, 80, 250))
@@ -210,6 +211,8 @@ while running:
             show_score(textX, textY)
 
             pygame.display.update()
+
+            play_time += 1
 
     elif win:
         while win:
