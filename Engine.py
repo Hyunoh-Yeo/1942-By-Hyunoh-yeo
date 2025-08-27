@@ -196,9 +196,11 @@ while running:
 
                 if enemy.isDestroyed():
                     enemies.remove(enemy)
-                    enemies.append(GroupEnemy(random.randint(1, 5)))
 
-            if score_val >= 10:
+            if play_time > 0 and play_time % 3000 == 0:
+                enemies.append(GroupEnemy(random.randint(1, 5)))
+
+            if score_val >= 20:
                 ingame = False
                 win = True
 
