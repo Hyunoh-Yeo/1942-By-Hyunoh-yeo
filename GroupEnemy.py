@@ -48,3 +48,10 @@ class GroupEnemy:
 
     def isDestroyed(self):
         return len(self.group) == 0
+    
+    
+    def checkAttacked(self):
+        for enemy in self.group:
+            if enemy.attacked:
+                return True
+        return False

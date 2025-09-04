@@ -25,7 +25,7 @@ background_height = background.get_height()
 
 tiles = math.ceil(screen_height / background_height) + 1
 scroll = 0
-d_scroll = 0.2
+d_scroll = 1
 
 #Load Background Music
 mixer.music.load("Sounds/Battlefield 1942 theme.wav")
@@ -144,13 +144,13 @@ while running:
                     
                     #Arrow Pressed
                     if event.key == pygame.K_LEFT:
-                        player.x_change = -0.5
+                        player.x_change = -3
                     if event.key == pygame.K_RIGHT:
-                        player.x_change = 0.5
+                        player.x_change = 3
                     if event.key == pygame.K_UP:
-                        player.y_change = -0.5
+                        player.y_change = -3
                     if event.key == pygame.K_DOWN:
-                        player.y_change = 0.5
+                        player.y_change = 3
 
                     #Space Pressed
                     if event.key == pygame.K_SPACE:
@@ -196,6 +196,10 @@ while running:
 
                 if enemy.isDestroyed():
                     enemies.remove(enemy)
+
+                if enemy.checkAttacked():
+                    ingame = False
+                    gameover = True
 
             if play_time > 0 and play_time % 3000 == 0:
                 enemies.append(GroupEnemy(random.randint(1, 5)))
