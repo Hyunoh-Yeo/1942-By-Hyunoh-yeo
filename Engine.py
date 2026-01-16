@@ -19,17 +19,13 @@ pygame.display.set_icon(icon)
 
 #Player
 playerImg = "1942-By-Hyunoh-Yeo\Image\F-22.png"
-playerX = 608
-playerY = 650
 
-player = Player(playerImg, playerX, playerY)
+player = Player(playerImg)
 
 #Enemy
 enemyImg = "1942-By-Hyunoh-Yeo\Image\Su-34.png"
-enemyX = random.randint(0, 1216)
-enemyY = 0
 
-enemy = Enemy(enemyImg, enemyX, enemyY)
+enemy = Enemy(enemyImg)
 
 def displayPlayer(temp):
     screen.blit(temp.image, (temp.x, temp.y))
@@ -47,9 +43,10 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        #Arrow Key Pressed
+        #Key Down
         if event.type == pygame.KEYDOWN:
-
+            
+            #Arrow Pressed
             if event.key == pygame.K_LEFT:
                 player.x_change = -0.2
             if event.key == pygame.K_RIGHT:
@@ -58,14 +55,14 @@ while running:
                 player.y_change = -0.2
             if event.key == pygame.K_DOWN:
                 player.y_change = 0.2
+        
+        #Key Up
         if event.type == pygame.KEYUP:
-            player.x_change = 0
-            player.y_change = 0
 
-    enemy.y_change = 0.1
-    enemy.x_change = random.uniform(-0.1, 0.1)
-
-
+            #Arrow Released
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                player.x_change = 0
+                player.y_change = 0
 
     #move player
     player.move()
@@ -75,7 +72,7 @@ while running:
     if not enemy.destroyed and not enemy.attacked:
         displayPlayer(enemy)
     else:
-        enemy = Enemy(enemyImg, random.randint(0, 1216), enemyY)
+        enemy = Enemy(enemyImg)
 
     pygame.display.update()
 

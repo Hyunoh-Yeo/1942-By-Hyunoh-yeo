@@ -1,10 +1,12 @@
 import pygame
 
 class Player:
-    def __init__(self, image, x, y):
+    def __init__(self, image):
         self.image = pygame.image.load(image)
-        self.x = x
-        self.y = y
+
+        #Create Player in the Middle
+        self.x = 608
+        self.y = 650
 
         self.x_change = 0
         self.y_change = 0
