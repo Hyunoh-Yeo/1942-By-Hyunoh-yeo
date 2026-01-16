@@ -7,6 +7,7 @@ from Enemy import *
 from Bullet import *
 from Button import *
 from pygame import mixer
+from GroupEnemy import *
 
 os.chdir("1942-By-Hyunoh-yeo")
 
@@ -52,6 +53,7 @@ def show_score(x, y):
     score = font.render("Score : " + str(score_val), True, (255, 255, 255))
     screen.blit(score, (x, y))
 
+"""
 #Check for collision between bullen and enemy
 def isCollision(enemy, bullet):
     distance = math.sqrt(math.pow((enemy.x + 24) - bullet.x, 2) + math.pow(enemy.y - bullet.y, 2))
@@ -60,6 +62,7 @@ def isCollision(enemy, bullet):
         return True
     else:
         return False
+"""
 
 #Game Loop
 running = True
@@ -99,12 +102,10 @@ while running:
         playerImg = "Image/Player.png"
         player = Player(playerImg)
 
-        #Enemy
-        enemyImg = "Image/Enemy.png"
+        #Group Enemy
         enemies = []
-        enemy_n = 3
-        for _ in range(enemy_n):
-            enemies.append(Enemy(enemyImg))
+        enemies.append(GroupEnemy(random.randint(1, 5)))
+        enemies.append(GroupEnemy(random.randint(1, 5)))
 
         #Bullet
         bulletImg = "Image/Bullet.png"
@@ -182,26 +183,21 @@ while running:
                     thisbullet.y -= thisbullet.y_change
 
                 for enemy in enemies:
-                    if isCollision(enemy, thisbullet):
-                        enemy.destroyed = True
-                        
-                        collision_sound.play()
+                    score_add = enemy.checkCollision(thisbullet)
 
-                        score_val += 1
-
+                    if score_add > 0:
                         bullets.remove(thisbullet)
+                        score_val += score_add
+                        collision_sound.play()
 
             #move enemies
             for enemy in enemies:
-                if not enemy.destroyed and not enemy.attacked:
-                    enemy.move(0, 0.1)
-                    enemy.display(screen)
-                elif enemy.attacked:
-                    ingame = False
-                    gameover = True
-                else:
+                enemy.move(0, 0.1)
+                enemy.display(screen)
+
+                if enemy.isDestroyed():
                     enemies.remove(enemy)
-                    enemies.append(Enemy(enemyImg))
+                    enemies.append(GroupEnemy(random.randint(1, 5)))
 
             if score_val >= 10:
                 ingame = False

@@ -6,11 +6,18 @@ class Enemy:
     destroyed = False
     attacked = False
 
-    def __init__(self, image):
+    def __init__(self, image, x=-1, y=-1):
         self.image = pygame.image.load(image)
 
-        self.x = random.randint(0, 1216)
-        self.y = 0
+        if x == -1:
+            self.x = random.randint(0, 1216)
+        else:
+            self.x = x
+        
+        if y == -1:
+            self.y = 0
+        else:
+            self.y = 0
 
         """
         self.x_change = 0.5
