@@ -2,12 +2,16 @@ import pygame
 import random
 from Player import *
 from Enemy import *
+from Bullet import *
 
 #Initializing pygame
 pygame.init()
 
 #Screen
 screen = pygame.display.set_mode((1280, 720))
+
+#Background
+background = pygame.image.load("1942-By-Hyunoh-yeo\Image\Background.png")
 
 #Title
 title = "1942 by Hyunoh Yeo"
@@ -19,16 +23,15 @@ pygame.display.set_icon(icon)
 
 #Player
 playerImg = "1942-By-Hyunoh-Yeo\Image\F-22.png"
-
 player = Player(playerImg)
 
 #Enemy
 enemyImg = "1942-By-Hyunoh-Yeo\Image\Su-34.png"
-
 enemy = Enemy(enemyImg)
 
-def displayPlayer(temp):
-    screen.blit(temp.image, (temp.x, temp.y))
+#Bullet
+bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
+bullet = Bullet(bulletImg, player.x, player.y)
 
 #Game Loop
 running = True
@@ -36,6 +39,9 @@ while running:
 
     #RGB Screen
     screen.fill((250, 250, 250))
+
+    #Background
+    screen.blit(background, (0, 0))
 
     for event in pygame.event.get():
 
@@ -48,13 +54,13 @@ while running:
             
             #Arrow Pressed
             if event.key == pygame.K_LEFT:
-                player.x_change = -0.2
+                player.x_change = -0.5
             if event.key == pygame.K_RIGHT:
-                player.x_change = 0.2
+                player.x_change = 0.5
             if event.key == pygame.K_UP:
-                player.y_change = -0.2
+                player.y_change = -0.5
             if event.key == pygame.K_DOWN:
-                player.y_change = 0.2
+                player.y_change = 0.5
         
         #Key Up
         if event.type == pygame.KEYUP:
@@ -67,10 +73,10 @@ while running:
     #move player
     player.move()
     enemy.move()
-    displayPlayer(player)
+    player.display(screen)
 
     if not enemy.destroyed and not enemy.attacked:
-        displayPlayer(enemy)
+        enemy.display(screen)
     else:
         enemy = Enemy(enemyImg)
 
