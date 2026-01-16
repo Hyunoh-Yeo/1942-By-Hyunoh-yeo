@@ -43,9 +43,12 @@ font = pygame.font.Font("freesansbold.ttf", 32)
 textX = 10
 textY = 10
 
-#Background Sound
+#Background Music and Sounds
 mixer.music.load("1942-By-Hyunoh-Yeo\Sounds\Battlefield 1942 theme.wav")
 mixer.music.play(-1)
+
+bullet_sound = mixer.Sound("1942-By-Hyunoh-Yeo\Sounds\Gun Sound.wav")
+collision_sound = mixer.Sound("1942-By-Hyunoh-Yeo\Sounds\explosion.wav")
 
 def show_score(x, y):
     score = font.render("Score : " + str(score_val), True, (255, 255, 255))
@@ -61,7 +64,11 @@ def isCollision(enemy, bullet):
 
 #Game Loop
 running = True
+gameover = False
+
 while running:
+    if gameover:
+        running = False
 
     #RGB Screen
     screen.fill((250, 250, 250))
@@ -95,6 +102,7 @@ while running:
 
                 bullets[-1].fire(screen, player.x + 24, player.y)
 
+                bullet_sound.play()
         
         #Key Up
         if event.type == pygame.KEYUP:
@@ -119,8 +127,8 @@ while running:
 
         if isCollision(enemy, thisbullet):
             enemy.destroyed = True
-            mixer.music.load("1942-By-Hyunoh-Yeo\Sounds\explosion.wav")
-            mixer.music.play(-1)
+            
+            collision_sound.play()
 
             score_val += 1
 
@@ -129,6 +137,8 @@ while running:
     #move enemy
     if not enemy.destroyed and not enemy.attacked:
         enemy.display(screen)
+    elif enemy.attacked:
+        gameover = True
     else:
         enemy = Enemy(enemyImg)
 
@@ -136,6 +146,26 @@ while running:
     show_score(textX, textY)
 
     pygame.display.update()
+
+while gameover:
+    #RGB Screen
+    screen.fill((250, 250, 250))
+
+    #Background
+    screen.blit(background, (0, 0))
+
+    #Game Over Text
+    text = font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(text, (550, 350))
+
+    for event in pygame.event.get():
+
+        #Check if Quitted
+        if event.type == pygame.QUIT:
+           gameover = False
+
+    pygame.display.update()
+
 
 #End Application      
 pygame.quit()
