@@ -6,7 +6,7 @@ class Bullet:
 
         self.x = x
         self.y = y
-        self.y_change = 0.5
+        self.y_change = 1
 
         self.bullet_state = "ready"
 
