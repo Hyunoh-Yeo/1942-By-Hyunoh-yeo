@@ -32,6 +32,7 @@ enemy = Enemy(enemyImg)
 #Bullet
 bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
 bullet = Bullet(bulletImg, 0, 800)
+bullets = []
 
 #Game Loop
 running = True
@@ -64,7 +65,11 @@ while running:
 
             #Space Pressed
             if event.key == pygame.K_SPACE:
-                bullet.fire(screen, player.x + 24, player.y)
+                bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
+                bullets.append(Bullet(bulletImg, 0, 800))
+
+                bullets[-1].fire(screen, player.x + 24, player.y)
+
         
         #Key Up
         if event.type == pygame.KEYUP:
@@ -86,12 +91,13 @@ while running:
         enemy = Enemy(enemyImg)
 
     #move bullet
-    if bullet.y < 0:
-        bullet.y = player.y
-        bullet.bullet_state = "ready"
-    if bullet.bullet_state is "fire":
-        bullet.fire(screen, bullet.x, bullet.y)
-        bullet.y -= bullet.y_change
+    for thisbullet in bullets:
+        if thisbullet.y < 0:
+            thisbullet.y = player.y
+            thisbullet.bullet_state = "ready"
+        if thisbullet.bullet_state is "fire":
+            thisbullet.fire(screen, thisbullet.x, thisbullet.y)
+            thisbullet.y -= thisbullet.y_change
 
     pygame.display.update()
 
