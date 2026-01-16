@@ -22,16 +22,16 @@ icon = pygame.image.load("1942-By-Hyunoh-Yeo\Image\Icon.png")
 pygame.display.set_icon(icon)
 
 #Player
-playerImg = "1942-By-Hyunoh-Yeo\Image\F-22.png"
+playerImg = "1942-By-Hyunoh-Yeo\Image\Player.png"
 player = Player(playerImg)
 
 #Enemy
-enemyImg = "1942-By-Hyunoh-Yeo\Image\Su-34.png"
+enemyImg = "1942-By-Hyunoh-Yeo\Image\Enemy.png"
 enemy = Enemy(enemyImg)
 
 #Bullet
 bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
-bullet = Bullet(bulletImg, player.x, player.y)
+bullet = Bullet(bulletImg, 0, 800)
 
 #Game Loop
 running = True
@@ -61,6 +61,10 @@ while running:
                 player.y_change = -0.5
             if event.key == pygame.K_DOWN:
                 player.y_change = 0.5
+
+            #Space Pressed
+            if event.key == pygame.K_SPACE:
+                bullet.fire(screen, player.x, player.y)
         
         #Key Up
         if event.type == pygame.KEYUP:
@@ -75,10 +79,16 @@ while running:
     enemy.move()
     player.display(screen)
 
+    #move enemy
     if not enemy.destroyed and not enemy.attacked:
         enemy.display(screen)
     else:
         enemy = Enemy(enemyImg)
+
+    #move bullet
+    if bullet.bullet_state is "fire":
+        bullet.fire(screen, bullet.x, bullet.y)
+        bullet.y -= bullet.y_change
 
     pygame.display.update()
 
