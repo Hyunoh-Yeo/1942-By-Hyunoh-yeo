@@ -64,107 +64,136 @@ def isCollision(enemy, bullet):
 
 #Game Loop
 running = True
+
+#Game Status
+menu = False
+ingame = True
 gameover = False
+win = False
 
 while running:
-    if gameover:
-        running = False
+    if menu:
+        screen.fill((250, 250, 250))
+    if ingame:
+        #RGB Screen
+        screen.fill((250, 250, 250))
 
-    #RGB Screen
-    screen.fill((250, 250, 250))
+        #Background
+        screen.blit(background, (0, 0))
 
-    #Background
-    screen.blit(background, (0, 0))
+        for event in pygame.event.get():
 
-    for event in pygame.event.get():
+            #Check if Quitted
+            if event.type == pygame.QUIT:
+                running = False
 
-        #Check if Quitted
-        if event.type == pygame.QUIT:
-            running = False
+            #Key Down
+            if event.type == pygame.KEYDOWN:
+                
+                #Arrow Pressed
+                if event.key == pygame.K_LEFT:
+                    player.x_change = -0.5
+                if event.key == pygame.K_RIGHT:
+                    player.x_change = 0.5
+                if event.key == pygame.K_UP:
+                    player.y_change = -0.5
+                if event.key == pygame.K_DOWN:
+                    player.y_change = 0.5
 
-        #Key Down
-        if event.type == pygame.KEYDOWN:
+                #Space Pressed
+                if event.key == pygame.K_SPACE:
+                    bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
+                    bullets.append(Bullet(bulletImg, 0, 800))
+
+                    bullets[-1].fire(screen, player.x + 24, player.y)
+
+                    bullet_sound.play()
             
-            #Arrow Pressed
-            if event.key == pygame.K_LEFT:
-                player.x_change = -0.5
-            if event.key == pygame.K_RIGHT:
-                player.x_change = 0.5
-            if event.key == pygame.K_UP:
-                player.y_change = -0.5
-            if event.key == pygame.K_DOWN:
-                player.y_change = 0.5
+            #Key Up
+            if event.type == pygame.KEYUP:
 
-            #Space Pressed
-            if event.key == pygame.K_SPACE:
-                bulletImg = "1942-By-Hyunoh-Yeo\Image\Bullet.png"
-                bullets.append(Bullet(bulletImg, 0, 800))
+                #Arrow Released
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    player.x_change = 0
+                    player.y_change = 0
 
-                bullets[-1].fire(screen, player.x + 24, player.y)
+        #move player
+        player.move()
+        enemy.move()
+        player.display(screen)
 
-                bullet_sound.play()
-        
-        #Key Up
-        if event.type == pygame.KEYUP:
+        #move each bullet from bullets list
+        for thisbullet in bullets:
+            if thisbullet.y < 0:
+                bullets.remove(thisbullet)
+            else:
+                thisbullet.fire(screen, thisbullet.x, thisbullet.y)
+                thisbullet.y -= thisbullet.y_change
 
-            #Arrow Released
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                player.x_change = 0
-                player.y_change = 0
+            if isCollision(enemy, thisbullet):
+                enemy.destroyed = True
+                
+                collision_sound.play()
 
-    #move player
-    player.move()
-    enemy.move()
-    player.display(screen)
+                score_val += 1
 
-    #move each bullet from bullets list
-    for thisbullet in bullets:
-        if thisbullet.y < 0:
-            bullets.remove(thisbullet)
+                bullets.remove(thisbullet)
+
+        #move enemy
+        if not enemy.destroyed and not enemy.attacked:
+            enemy.display(screen)
+        elif enemy.attacked:
+            ingame = False
+            gameover = True
         else:
-            thisbullet.fire(screen, thisbullet.x, thisbullet.y)
-            thisbullet.y -= thisbullet.y_change
+            enemy = Enemy(enemyImg)
 
-        if isCollision(enemy, thisbullet):
-            enemy.destroyed = True
-            
-            collision_sound.play()
+        if score_val >= 10:
+            ingame = False
+            win = True
 
-            score_val += 1
+        #display score
+        show_score(textX, textY)
 
-            bullets.remove(thisbullet)
+        pygame.display.update()
 
-    #move enemy
-    if not enemy.destroyed and not enemy.attacked:
-        enemy.display(screen)
-    elif enemy.attacked:
-        gameover = True
-    else:
-        enemy = Enemy(enemyImg)
+    elif win:
+        #RGB Screen
+        screen.fill((250, 250, 250))
 
-    #display score
-    show_score(textX, textY)
+        #Background
+        screen.blit(background, (0, 0))
 
-    pygame.display.update()
+        #Game Over Text
+        text = font.render("YOU WIN", True, (255, 255, 255))
+        screen.blit(text, (550, 350))
 
-while gameover:
-    #RGB Screen
-    screen.fill((250, 250, 250))
+        for event in pygame.event.get():
 
-    #Background
-    screen.blit(background, (0, 0))
+            #Check if Quitted
+            if event.type == pygame.QUIT:
+                running = False
 
-    #Game Over Text
-    text = font.render("GAME OVER", True, (255, 255, 255))
-    screen.blit(text, (550, 350))
+        pygame.display.update()     
 
-    for event in pygame.event.get():
+    elif gameover:
+        #RGB Screen
+        screen.fill((250, 250, 250))
 
-        #Check if Quitted
-        if event.type == pygame.QUIT:
-           gameover = False
+        #Background
+        screen.blit(background, (0, 0))
 
-    pygame.display.update()
+        #Game Over Text
+        text = font.render("GAME OVER", True, (255, 255, 255))
+        screen.blit(text, (550, 350))
+
+        for event in pygame.event.get():
+
+            #Check if Quitted
+            if event.type == pygame.QUIT:
+                running = False
+
+        pygame.display.update()
 
 
 #End Application      
