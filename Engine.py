@@ -47,7 +47,10 @@ player = Player(playerImg)
 
 #Enemy
 enemyImg = "Image/Enemy.png"
-enemy = Enemy(enemyImg)
+enemies = []
+enemy_n = 3
+for _ in range(enemy_n):
+    enemies.append(Enemy(enemyImg))
 
 #Bullet
 bulletImg = "Image/Bullet.png"
@@ -164,7 +167,6 @@ while running:
 
         #move player
         player.move()
-        enemy.move()
         player.display(screen)
 
         #move each bullet from bullets list
@@ -175,23 +177,27 @@ while running:
                 thisbullet.fire(screen, thisbullet.x, thisbullet.y)
                 thisbullet.y -= thisbullet.y_change
 
-            if isCollision(enemy, thisbullet):
-                enemy.destroyed = True
-                
-                collision_sound.play()
+            for enemy in enemies:
+                if isCollision(enemy, thisbullet):
+                    enemy.destroyed = True
+                    
+                    collision_sound.play()
 
-                score_val += 1
+                    score_val += 1
 
-                bullets.remove(thisbullet)
+                    bullets.remove(thisbullet)
 
-        #move enemy
-        if not enemy.destroyed and not enemy.attacked:
-            enemy.display(screen)
-        elif enemy.attacked:
-            ingame = False
-            gameover = True
-        else:
-            enemy = Enemy(enemyImg)
+        #move enemies
+        for enemy in enemies:
+            if not enemy.destroyed and not enemy.attacked:
+                enemy.move()
+                enemy.display(screen)
+            elif enemy.attacked:
+                ingame = False
+                gameover = True
+            else:
+                enemies.remove(enemy)
+                enemies.append(Enemy(enemyImg))
 
         if score_val >= 10:
             ingame = False
