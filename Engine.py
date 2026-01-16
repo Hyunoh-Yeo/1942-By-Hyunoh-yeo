@@ -25,6 +25,7 @@ background_height = background.get_height()
 
 tiles = math.ceil(screen_height / background_height) + 1
 scroll = 0
+d_scroll = 0.2
 
 #Start & Exir Button
 startImg = pygame.image.load("Image/Start.png").convert_alpha()
@@ -121,8 +122,8 @@ while running:
         for i in range(tiles):
             screen.blit(background, (0, -((i * background_height)) + scroll))
 
-        scroll += 0.3
-        if scroll > background_height - 100:
+        scroll += d_scroll
+        if scroll > background_height:
             scroll = 0
 
         for event in pygame.event.get():
