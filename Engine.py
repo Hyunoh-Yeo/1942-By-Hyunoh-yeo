@@ -4,6 +4,7 @@ import math
 from Player import *
 from Enemy import *
 from Bullet import *
+from pygame import mixer
 
 #Initializing pygame
 pygame.init()
@@ -41,6 +42,10 @@ font = pygame.font.Font("freesansbold.ttf", 32)
 
 textX = 10
 textY = 10
+
+#Background Sound
+mixer.music.load("1942-By-Hyunoh-Yeo\Sounds\Battlefield 1942 theme.wav")
+mixer.music.play(-1)
 
 def show_score(x, y):
     score = font.render("Score : " + str(score_val), True, (255, 255, 255))
@@ -114,6 +119,8 @@ while running:
 
         if isCollision(enemy, thisbullet):
             enemy.destroyed = True
+            mixer.music.load("1942-By-Hyunoh-Yeo\Sounds\explosion.wav")
+            mixer.music.play(-1)
 
             score_val += 1
 
@@ -125,6 +132,7 @@ while running:
     else:
         enemy = Enemy(enemyImg)
 
+    #display score
     show_score(textX, textY)
 
     pygame.display.update()
