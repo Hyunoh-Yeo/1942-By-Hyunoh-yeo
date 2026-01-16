@@ -25,7 +25,7 @@ background_height = background.get_height()
 
 tiles = math.ceil(screen_height / background_height) + 1
 scroll = 0
-d_scroll = 1
+d_scroll = 0.5
 
 #Load Background Music
 mixer.music.load("Sounds/Battlefield 1942 theme.wav")
@@ -144,13 +144,13 @@ while running:
                     
                     #Arrow Pressed
                     if event.key == pygame.K_LEFT:
-                        player.x_change = -3
+                        player.x_change = -0.5
                     if event.key == pygame.K_RIGHT:
-                        player.x_change = 3
+                        player.x_change = 0.5
                     if event.key == pygame.K_UP:
-                        player.y_change = -3
+                        player.y_change = -0.5
                     if event.key == pygame.K_DOWN:
-                        player.y_change = 3
+                        player.y_change = 0.5
 
                     #Space Pressed
                     if event.key == pygame.K_SPACE:

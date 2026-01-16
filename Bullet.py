@@ -7,7 +7,7 @@ class Bullet:
 
         self.x = x
         self.y = y
-        self.y_change = 6
+        self.y_change = 1
     def fire(self, screen, x, y):
         self.x = x
         self.y = y
