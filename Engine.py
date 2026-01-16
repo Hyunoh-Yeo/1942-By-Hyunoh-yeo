@@ -4,6 +4,7 @@ import math
 from Player import *
 from Enemy import *
 from Bullet import *
+from Button import *
 from pygame import mixer
 
 #Initializing pygame
@@ -14,6 +15,12 @@ screen = pygame.display.set_mode((1280, 720))
 
 #Background
 background = pygame.image.load("1942-By-Hyunoh-yeo\Image\Background.png")
+
+#Start & Exir Button
+startImg = pygame.image.load("1942-By-Hyunoh-yeo\Image\Start.png").convert_alpha()
+exitImg = pygame.image.load("1942-By-Hyunoh-yeo\Image\Exit.png").convert_alpha()
+start_button = Button(400, 150, startImg, 0.5)
+exit_button = Button(500, 400, exitImg, 0.3)
 
 #Title
 title = "1942 by Hyunoh Yeo"
@@ -39,21 +46,23 @@ bullets = []
 #Score
 score_val = 0
 font = pygame.font.Font("freesansbold.ttf", 32)
-
 textX = 10
 textY = 10
 
-#Background Music and Sounds
+#Background Music
 mixer.music.load("1942-By-Hyunoh-Yeo\Sounds\Battlefield 1942 theme.wav")
 mixer.music.play(-1)
 
+#Sounds
 bullet_sound = mixer.Sound("1942-By-Hyunoh-Yeo\Sounds\Gun Sound.wav")
 collision_sound = mixer.Sound("1942-By-Hyunoh-Yeo\Sounds\explosion.wav")
 
+#Shows score
 def show_score(x, y):
     score = font.render("Score : " + str(score_val), True, (255, 255, 255))
     screen.blit(score, (x, y))
 
+#Check for collision between bullen and enemy
 def isCollision(enemy, bullet):
     distance = math.sqrt(math.pow((enemy.x + 24) - bullet.x, 2) + math.pow(enemy.y - bullet.y, 2))
 
@@ -66,15 +75,35 @@ def isCollision(enemy, bullet):
 running = True
 
 #Game Status
-menu = False
-ingame = True
+menu = True
+ingame = False
 gameover = False
 win = False
 
 while running:
     if menu:
-        screen.fill((250, 250, 250))
-    if ingame:
+        screen.fill((0, 0, 0))
+
+        if start_button.draw(screen):
+            menu = False
+            ingame = True
+
+            continue
+
+        if exit_button.draw(screen):
+            running = False
+
+            continue
+
+        for event in pygame.event.get():
+
+            #Check if Quitted
+            if event.type == pygame.QUIT:
+                running = False        
+
+        pygame.display.update()
+
+    elif ingame:
         #RGB Screen
         screen.fill((250, 250, 250))
 
