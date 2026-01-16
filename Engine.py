@@ -105,7 +105,6 @@ while running:
         #Group Enemy
         enemies = []
         enemies.append(GroupEnemy(random.randint(1, 5)))
-        enemies.append(GroupEnemy(random.randint(1, 5)))
 
         #Bullet
         bulletImg = "Image/Bullet.png"
