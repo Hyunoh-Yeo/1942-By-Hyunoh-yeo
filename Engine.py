@@ -96,155 +96,159 @@ win = False
 
 while running:
     if menu:
-        screen.fill((0, 0, 0))
+        while menu:
+            screen.fill((0, 0, 0))
 
-        if start_button.draw(screen):
-            menu = False
-            ingame = True
+            if start_button.draw(screen):
+                menu = False
+                ingame = True
 
-            continue
+                continue
 
-        if exit_button.draw(screen):
-            running = False
+            if exit_button.draw(screen):
+                running = False
 
-            continue
+                continue
 
-        for event in pygame.event.get():
+            for event in pygame.event.get():
 
-            #Check if Quitted
-            if event.type == pygame.QUIT:
-                running = False        
+                #Check if Quitted
+                if event.type == pygame.QUIT:
+                    pygame.quit()     
 
-        pygame.display.update()
+            pygame.display.update()
 
     elif ingame:
-        #RGB Screen
-        screen.fill((80, 80, 250))
+        while ingame:
+            #RGB Screen
+            screen.fill((80, 80, 250))
 
-        #Background
-        for i in range(tiles):
-            screen.blit(background, (0, -((i * background_height)) + scroll))
+            #Background
+            for i in range(tiles):
+                screen.blit(background, (0, -((i * background_height)) + scroll))
 
-        scroll += d_scroll
-        if scroll > background_height:
-            scroll = 0
+            scroll += d_scroll
+            if scroll > background_height:
+                scroll = 0
 
-        for event in pygame.event.get():
+            for event in pygame.event.get():
 
-            #Check if Quitted
-            if event.type == pygame.QUIT:
-                running = False
+                #Check if Quitted
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
-            #Key Down
-            if event.type == pygame.KEYDOWN:
-                
-                #Arrow Pressed
-                if event.key == pygame.K_LEFT:
-                    player.x_change = -0.5
-                if event.key == pygame.K_RIGHT:
-                    player.x_change = 0.5
-                if event.key == pygame.K_UP:
-                    player.y_change = -0.5
-                if event.key == pygame.K_DOWN:
-                    player.y_change = 0.5
-
-                #Space Pressed
-                if event.key == pygame.K_SPACE:
-                    bulletImg = "Image/Bullet.png"
-                    bullets.append(Bullet(bulletImg, 0, 800))
-
-                    bullets[-1].fire(screen, player.x + 24, player.y)
-
-                    bullet_sound.play()
-            
-            #Key Up
-            if event.type == pygame.KEYUP:
-
-                #Arrow Released
-                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                    player.x_change = 0
-                    player.y_change = 0
-
-        #move player
-        player.move()
-        player.display(screen)
-
-        #move each bullet from bullets list
-        for thisbullet in bullets:
-            if thisbullet.y < 0:
-                bullets.remove(thisbullet)
-            else:
-                thisbullet.fire(screen, thisbullet.x, thisbullet.y)
-                thisbullet.y -= thisbullet.y_change
-
-            for enemy in enemies:
-                if isCollision(enemy, thisbullet):
-                    enemy.destroyed = True
+                #Key Down
+                if event.type == pygame.KEYDOWN:
                     
-                    collision_sound.play()
+                    #Arrow Pressed
+                    if event.key == pygame.K_LEFT:
+                        player.x_change = -0.5
+                    if event.key == pygame.K_RIGHT:
+                        player.x_change = 0.5
+                    if event.key == pygame.K_UP:
+                        player.y_change = -0.5
+                    if event.key == pygame.K_DOWN:
+                        player.y_change = 0.5
 
-                    score_val += 1
+                    #Space Pressed
+                    if event.key == pygame.K_SPACE:
+                        bulletImg = "Image/Bullet.png"
+                        bullets.append(Bullet(bulletImg, 0, 800))
 
+                        bullets[-1].fire(screen, player.x + 24, player.y)
+
+                        bullet_sound.play()
+                
+                #Key Up
+                if event.type == pygame.KEYUP:
+
+                    #Arrow Released
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                        player.x_change = 0
+                        player.y_change = 0
+
+            #move player
+            player.move()
+            player.display(screen)
+
+            #move each bullet from bullets list
+            for thisbullet in bullets:
+                if thisbullet.y < 0:
                     bullets.remove(thisbullet)
+                else:
+                    thisbullet.fire(screen, thisbullet.x, thisbullet.y)
+                    thisbullet.y -= thisbullet.y_change
 
-        #move enemies
-        for enemy in enemies:
-            if not enemy.destroyed and not enemy.attacked:
-                enemy.move()
-                enemy.display(screen)
-            elif enemy.attacked:
+                for enemy in enemies:
+                    if isCollision(enemy, thisbullet):
+                        enemy.destroyed = True
+                        
+                        collision_sound.play()
+
+                        score_val += 1
+
+                        bullets.remove(thisbullet)
+
+            #move enemies
+            for enemy in enemies:
+                if not enemy.destroyed and not enemy.attacked:
+                    enemy.move(0, 0.1)
+                    enemy.display(screen)
+                elif enemy.attacked:
+                    ingame = False
+                    gameover = True
+                else:
+                    enemies.remove(enemy)
+                    enemies.append(Enemy(enemyImg))
+
+            if score_val >= 10:
                 ingame = False
-                gameover = True
-            else:
-                enemies.remove(enemy)
-                enemies.append(Enemy(enemyImg))
+                win = True
 
-        if score_val >= 10:
-            ingame = False
-            win = True
+            #display score
+            show_score(textX, textY)
 
-        #display score
-        show_score(textX, textY)
-
-        pygame.display.update()
+            pygame.display.update()
 
     elif win:
-        #RGB Screen
-        screen.fill((80, 80, 250))
+        while win:
+            #RGB Screen
+            screen.fill((80, 80, 250))
 
-        #Background
-        #screen.blit(background, (0, 0))
+            #Background
+            #screen.blit(background, (0, 0))
 
-        #Game Over Text
-        text = font.render("YOU WIN", True, (255, 255, 255))
-        screen.blit(text, (550, 350))
+            #Game Over Text
+            text = font.render("YOU WIN", True, (255, 255, 255))
+            screen.blit(text, (550, 350))
 
-        for event in pygame.event.get():
+            for event in pygame.event.get():
 
-            #Check if Quitted
-            if event.type == pygame.QUIT:
-                running = False
+                #Check if Quitted
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
-        pygame.display.update()     
+            pygame.display.update()     
 
     elif gameover:
-        #RGB Screen
-        screen.fill((80, 80, 250))
+        while gameover:
+            #RGB Screen
+            screen.fill((80, 80, 250))
 
-        #Background
-        #screen.blit(background, (0, 0))
+            #Background
+            #screen.blit(background, (0, 0))
 
-        #Game Over Text
-        text = font.render("GAME OVER", True, (255, 255, 255))
-        screen.blit(text, (550, 350))
+            #Game Over Text
+            text = font.render("GAME OVER", True, (255, 255, 255))
+            screen.blit(text, (550, 350))
 
-        for event in pygame.event.get():
+            for event in pygame.event.get():
 
-            #Check if Quitted
-            if event.type == pygame.QUIT:
-                running = False
+                #Check if Quitted
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
-        pygame.display.update()
+            pygame.display.update()
 
 
 #End Application      

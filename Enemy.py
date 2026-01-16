@@ -16,12 +16,13 @@ class Enemy:
         self.x_change = 0.5
         """
 
-    def move(self):
+    def move(self, dx, dy):
         if not self.destroyed:
             """
             self.x += self.x_change
             """
-            self.y += 0.1
+            self.x += dx
+            self.y += dy
 
             """
             if self.x <= random.randint(0, 1216): #방향 바뀌는 interval 이 너무 짧음 
